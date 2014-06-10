@@ -112,16 +112,10 @@ weekend <- (days == "Saturday" | days == "Sunday")
 dayfactor <- factor(weekend, labels = list("weekday", "weekend"))
 filledInData$daytype <- dayfactor
 
-weekend <- filledInData[filledInData$daytype == "weekend",]
-weekday <- filledInData[filledInData$daytype == "weekday",]
+groupedData <- aggregate(filledInData$steps, list(DayType = filledInData$daytype, Interval = filledInData$interval), mean)
+library(lattice)
+xyplot(groupedData$x ~ groupedData$Interval | groupedData$DayType, layout = c(1, 2), xlab = "Interval", ylab = "Number of Steps", type="l")
 
-par(mfrow=c(2,1))
-par(mar=c(5,4,4,2))
-averageStepsForWeekend <- tapply(weekend$steps, weekend$interval, mean)
-plot(names(averageStepsForWeekend), averageStepsForWeekend , type="l", xlab="Interval", ylab="Number of Steps", main="weekend")
-
-averageStepsForWeekday <- tapply(weekday$steps, weekday$interval, mean)
-plot(names(averageStepsForWeekday), averageStepsForWeekday , type="l", xlab="Interval", ylab="Number of Steps", main="weekday")
 
 
 
